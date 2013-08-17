@@ -2,12 +2,9 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 
-# If you have a Gemfile, require the gems listed there, including any gems
+# Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
-Bundler.require(:default, Rails.env) if defined?(Bundler)
-if defined?(Bundler)
-  Bundler.require(*Rails.groups(:assets => %w(development test)))
-end
+Bundler.require(:default, Rails.env)
 
 module OauthProviderDemo
   class Application < Rails::Application
@@ -44,8 +41,5 @@ module OauthProviderDemo
 
     config.assets.enabled = true
     config.assets.version = '1.0'
-
-    # Mass assingment protection
-    config.active_record.whitelist_attributes=true
   end
 end

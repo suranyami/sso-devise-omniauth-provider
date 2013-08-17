@@ -22,7 +22,7 @@ Devise.setup do |config|
   # session. If you need permissions, you should implement that in a before filter.
   # You can also supply hash where the value is a boolean expliciting if authentication
   # should be aborted or not if the value is not present. By default is empty.
-  # config.authentication_keys = [ :username ]
+  config.authentication_keys = [ :login ]
 
   # Configure parameters from the request object used for authentication. Each entry
   # given should be a request method and it will automatically be passed to
@@ -169,4 +169,10 @@ Devise.setup do |config|
   #config.warden do |manager|
     #manager.default_strategies(:scope => :user).unshift(:custom_database_authenticatable)
   #end
+end
+
+Warden::Manager.after_set_user do |user, auth, opts|
+  Rails.logger.warn "user : #{user.inspect}"
+  Rails.logger.warn "auth : #{auth.inspect}"
+  Rails.logger.warn "opts : #{opts.inspect}"
 end
