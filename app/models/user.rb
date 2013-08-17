@@ -9,8 +9,6 @@ class User < ActiveRecord::Base
 
   self.token_authentication_key = "oauth_token"
 
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name
-
   def apply_omniauth(omniauth)
     authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'])
   end
@@ -22,5 +20,9 @@ class User < ActiveRecord::Base
   def initialize_fields
     self.status = "Active"
     self.expiration_date = 1.year.from_now
+  end
+  
+  def email_required?
+    false
   end
 end

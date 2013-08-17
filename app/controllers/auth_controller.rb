@@ -1,14 +1,16 @@
 class AuthController < ApplicationController
+  include ActionView::Helpers::UrlHelper
+
   before_filter :authenticate_user!, :except => [:access_token]
   skip_before_filter :verify_authenticity_token, :only => [:access_token]
 
   def welcome
-    render :text => "Hiya! #{current_user.first_name} #{current_user.last_name}"
+    render :inline => "Hiya #{current_user.login}! #{link_to("Log out", destroy_user_session_path)}"
   end
 
-  def authorize
+  def authorize 
     AccessGrant.prune!
-    access_grant = current_user.access_grants.create({:client => application, :state => params[:state]}, :without_protection => true)
+    access_grant = current_user.access_grants.create({:client => application, :state => params[:state]})
     redirect_to access_grant.redirect_uri_for(params[:redirect_uri])
   end
 
@@ -39,11 +41,7 @@ class AuthController < ApplicationController
       :provider => 'josh_id',
       :id => current_user.id.to_s,
       :info => {
-         :email      => current_user.email,
-      },
-      :extra => {
-         :first_name => current_user.first_name,
-         :last_name  => current_user.last_name
+         :login => current_user.login,
       }
     }
 
